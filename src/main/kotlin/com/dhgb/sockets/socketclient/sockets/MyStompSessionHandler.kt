@@ -8,7 +8,6 @@ import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter
 import org.springframework.web.socket.config.annotation.EnableWebSocket
 import java.lang.reflect.Type
 
-
 @Configuration
 @EnableWebSocket
 class MyStompSessionHandler: StompSessionHandlerAdapter() {
@@ -28,7 +27,7 @@ class MyStompSessionHandler: StompSessionHandlerAdapter() {
 
     override fun handleException(session: StompSession, command: StompCommand?, headers: StompHeaders, payload: ByteArray, exception: Throwable) {
 //        println("handleException: $exception")
-        println("payload is ${String(payload)}")
+        println("Get: ${String(payload)}")
     }
 
     override fun handleTransportError(session: StompSession, exception: Throwable) {

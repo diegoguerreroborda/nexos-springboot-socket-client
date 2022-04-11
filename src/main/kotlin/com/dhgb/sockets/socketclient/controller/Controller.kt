@@ -4,13 +4,13 @@ import com.dhgb.sockets.socketclient.sockets.MyStompSessionHandler
 import org.springframework.http.HttpStatus
 import org.springframework.messaging.simp.stomp.StompSession
 import org.springframework.messaging.simp.stomp.StompSessionHandler
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.socket.client.WebSocketClient
 import org.springframework.web.socket.client.standard.StandardWebSocketClient
 import org.springframework.web.socket.messaging.WebSocketStompClient
-
 
 //Client
 @RestController
@@ -21,14 +21,25 @@ class Controller {
     private val sessionHandler: StompSessionHandler = MyStompSessionHandler()
     private val stompSession: StompSession = stompClient.connect(URL, sessionHandler).get()
 
-    init {
-//        stompClient.messageConverter = MappingJackson2MessageConverter()
+//    init {
+//        stompSession.subscribe(SUBSCRIBE, sessionHandler)
+//    }
+
+    @GetMapping("/subscribe")
+    fun connect(): String {
         stompSession.subscribe(SUBSCRIBE, sessionHandler)
+        return "Connect"
+    }
+
+    @GetMapping("/unsubscribe")
+    fun disconnect(): String {
+        stompSession.disconnect()
+        return "Disconnect"
     }
 
     @PostMapping("/info")
     fun test(@RequestBody data: String): HttpStatus {
-        println("Se va a enviar $data")
+        println("Send data: $data")
         return try {
             stompSession.send(DESTINATION, passTextToArrayByteArray(data))
             HttpStatus.OK
